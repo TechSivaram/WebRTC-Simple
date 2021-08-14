@@ -11,10 +11,10 @@
     <div style="height: 100%;">
         <div id="userId"></div>
         <div class="remote-video">
-            <video id="remoteVideo" playsinline autoplay></video>
+            <video id="remoteVideo" playsinline autoplay controls></video>
         </div>
         <div class="local-video">
-            <video id="localVideo" playsinline autoplay muted></video>
+            <video id="localVideo" playsinline autoplay muted controls></video>
         </div>
         <div class="userslist">
             <div>
@@ -25,8 +25,8 @@
             </div>
             <div>
                 <button id="call">Call</button>
-                <button id="share">Screen</button>
-                <button id="cam">Camera</button>
+                <button id="share">Screen On</button>
+                <button id="cam">Camera On</button>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>

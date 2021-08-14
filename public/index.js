@@ -8,7 +8,7 @@ const peer = new RTCPeerConnection({
 });
 
 // Connecting to socket
-const socket = io('http://localhost:3000');
+const socket = io('https://webrtc-techsivaram.herokuapp.com');
 
 const onSocketConnected = async () => {
   const constraints = {

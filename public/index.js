@@ -21,12 +21,41 @@ const onSocketConnected = async () => {
 }
 
 let callButton = document.querySelector('#call');
+let shareButton = document.querySelector('#share');
+let cameraButton = document.querySelector('#cam');
+
+shareButton.addEventListener('click', async () => {
+  const constraints = {
+    audio: true,
+    video: true
+  };
+  const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
+  document.querySelector('#localVideo').srcObject = stream;
+
+  peer.getSenders().forEach(async s => {
+    if (s.track && s.track.kind === 'video')
+      await s.replaceTrack(stream.getTracks()[0]);
+  });
+});
+
+cameraButton.addEventListener('click', async () => {
+  const constraints = {
+    audio: true,
+    video: true
+  };
+  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  document.querySelector('#localVideo').srcObject = stream;
+  peer.getSenders().forEach(async s => {
+    if (s.track && s.track.kind === 'video')
+      await s.replaceTrack(stream.getTracks().find(track => track.kind === 'video'));
+  });
+});
 
 // Handle call button
 callButton.addEventListener('click', async () => {
   const localPeerOffer = await peer.createOffer();
   await peer.setLocalDescription(new RTCSessionDescription(localPeerOffer));
-  
+
   sendMediaOffer(localPeerOffer);
 });
 
@@ -93,7 +122,7 @@ const onUpdateUserList = ({ userIds }) => {
   const usersToDisplay = userIds.filter(id => id !== socket.id);
 
   usersList.innerHTML = '';
-  
+
   usersToDisplay.forEach(user => {
     const userItem = document.createElement('div');
     userItem.innerHTML = user;

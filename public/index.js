@@ -16,6 +16,10 @@ const onSocketConnected = async () => {
     video: true
   };
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  var vidTrack = stream.getVideoTracks();
+  vidTrack.forEach(track => track.enabled = false);
+  var audioTrack = stream.getAudioTracks();
+  audioTrack.forEach(track => track.enabled = false);
   document.querySelector('#localVideo').srcObject = stream;
   stream.getTracks().forEach(track => peer.addTrack(track, stream));
 }
@@ -23,6 +27,7 @@ const onSocketConnected = async () => {
 let callButton = document.querySelector('#call');
 let shareButton = document.querySelector('#share');
 let cameraButton = document.querySelector('#cam');
+let micButton = document.querySelector('#mic');
 
 shareButton.addEventListener('click', async () => {
   const constraints = {
@@ -43,12 +48,43 @@ cameraButton.addEventListener('click', async () => {
     audio: true,
     video: true
   };
-  const stream = await navigator.mediaDevices.getUserMedia(constraints);
-  document.querySelector('#localVideo').srcObject = stream;
-  peer.getSenders().forEach(async s => {
-    if (s.track && s.track.kind === 'video')
-      await s.replaceTrack(stream.getTracks().find(track => track.kind === 'video'));
-  });
+
+  if (cameraButton.textContent == 'Camera On') {
+    peer.getSenders().forEach(s => {
+      if (s.track && s.track.kind === 'video')
+        s.track.enabled = true;
+    });
+    cameraButton.textContent = 'Camera Off';
+  }
+  else {
+    peer.getSenders().forEach(s => {
+      if (s.track && s.track.kind === 'video')
+        s.track.enabled = false;
+    });
+    cameraButton.textContent = 'Camera On';
+  }
+});
+
+micButton.addEventListener('click', async () => {
+  const constraints = {
+    audio: true,
+    video: true
+  };
+
+  if (micButton.textContent == 'Mic On') {
+    peer.getSenders().forEach(s => {
+      if (s.track && s.track.kind === 'audio')
+        s.track.enabled = true;
+    });
+    micButton.textContent = 'Mic Off';
+  }
+  else {
+    peer.getSenders().forEach(s => {
+      if (s.track && s.track.kind === 'audio')
+        s.track.enabled = false;
+    });
+    micButton.textContent = 'Mic On';
+  }
 });
 
 // Handle call button

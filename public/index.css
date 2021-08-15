@@ -1,6 +1,7 @@
 #call,
 #share,
-#cam {
+#cam,
+#mic {
   display: inline-flex;
   background: linear-gradient(214.84deg, rgb(15, 9, 68) 20.52%, rgb(9, 4, 50) 89.43%);
   transition: background 1s;
@@ -13,7 +14,8 @@
 
 #call:hover,
 #share:hover,
-#cam:hover {
+#cam:hover,
+#mic:hover {
   background: linear-gradient(90deg, rgb(110, 42, 255) 0%, rgb(148, 98, 255) 100%);
 }
 
